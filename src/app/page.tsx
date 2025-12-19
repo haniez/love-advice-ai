@@ -2,9 +2,17 @@
 
 import { useState } from "react";
 
+interface Advice {
+  summary: string;
+  emotions: string[];
+  whatToDo: string;
+  whatToAvoid: string;
+  exampleMessage: string;
+}
+
 export default function Home() {
   const [screenshot, setScreenshot] = useState<File | null>(null);
-  const [advice, setAdvice] = useState<string>("");
+  const [advice, setAdvice] = useState<Advice | null>(null);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -17,18 +25,22 @@ export default function Home() {
   const getAdvice = () => {
     if (!screenshot) {
       setError("Please upload a screenshot first.");
-      setAdvice("");
+      setAdvice(null);
       return;
     }
     
     setLoading(true);
     setError("");
-    setAdvice("");
+    setAdvice(null);
 
     setTimeout(() => {
-      setAdvice(
-        "Based on the conversation, it seems like you should communicate your feelings more openly. Honesty and clear communication are key to a healthy relationship."
-      );
+      setAdvice({
+        summary: "The conversation seems a bit tense, with one person appearing defensive and the other frustrated.",
+        emotions: ["Frustration", "Anxiety", "Defensiveness"],
+        whatToDo: "Create a calm and open environment for conversation. Use 'I' statements to express your feelings without blaming.",
+        whatToAvoid: "Don't make assumptions or accuse the other person. Avoid bringing up past issues that aren't relevant.",
+        exampleMessage: "Hey, I feel like we might be misunderstanding each other. Can we talk about it when you have a moment? I want to make sure we're on the same page."
+      });
       setLoading(false);
     }, 2000); // Simulate a 2-second delay
   };
@@ -83,11 +95,41 @@ export default function Home() {
         )}
 
         {advice && !loading && (
-          <div className="mt-8 rounded-xl bg-slate-50 p-6">
-            <h2 className="mb-3 text-2xl font-semibold text-slate-800">
-              Your Advice
-            </h2>
-            <p className="text-slate-600 leading-relaxed">{advice}</p>
+          <div className="mt-8 rounded-xl bg-slate-50 p-6 space-y-6">
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-800 flex items-center">
+                <span className="mr-2">📝</span> Situation Summary
+              </h2>
+              <p className="text-slate-600 leading-relaxed mt-2">{advice.summary}</p>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-800 flex items-center">
+                <span className="mr-2">🧐</span> Emotions Detected
+              </h2>
+              <ul className="list-disc list-inside mt-2 text-slate-600 space-y-1">
+                {advice.emotions.map((emotion, index) => (
+                  <li key={index}>{emotion}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-800 flex items-center">
+                <span className="mr-2">👍</span> What to Do
+              </h2>
+              <p className="text-slate-600 leading-relaxed mt-2">{advice.whatToDo}</p>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-800 flex items-center">
+                <span className="mr-2">👎</span> What to Avoid
+              </h2>
+              <p className="text-slate-600 leading-relaxed mt-2">{advice.whatToAvoid}</p>
+            </div>
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-800 flex items-center">
+                <span className="mr-2">💬</span> Example Message
+              </h2>
+              <p className="text-slate-600 leading-relaxed mt-2 italic bg-slate-100 p-4 rounded-lg">"{advice.exampleMessage}"</p>
+            </div>
           </div>
         )}
       </div>
