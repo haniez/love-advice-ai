@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutal Advice App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>HONEST / BRUTAL ADVICE APP (MY MARKET)</h1>
+        <form action="/get-advice" method="post">
+            <label for="facts">Apa yang jadi? (Facts)</label>
+            <textarea id="facts" name="facts" rows="8" placeholder="Cerita sini..."></textarea>
+
+            <label for="feelings">Apa yang kau rasa / fikir?</label>
+            <textarea id="feelings" name="feelings" rows="5" placeholder="Luahkan perasaan kau..."></textarea>
+
+            <label for="hope">Apa jawapan yang kau harap dengar? (Optional)</label>
+            <textarea id="hope" name="hope" rows="3" placeholder="Jujur je..."></textarea>
+
+            <button type="submit">Bagi aku reality check</button>
+        </form>
+        
+        {% if advice %}
+        <div class="advice-container">
+            <h2>Your Brutal Advice</h2>
+            <p class="opening">{{ advice.opening }}</p>
+            <p class="breakdown">{{ advice.breakdown }}</p>
+            <p class="brutal-truth">{{ advice.brutal_truth }}</p>
+            <p class="verdict">{{ advice.verdict }}</p>
+            <p class="emotional-close">{{ advice.emotional_close }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
